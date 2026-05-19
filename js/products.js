@@ -1,7 +1,7 @@
 async function loadProducts() {
     const response = await fetch("https://fakestoreapi.com/products");
     const products = await response.json();
-    displayProducts(products);  
+    displayProducts(products);
 }
 
 function displayProducts(products) {
@@ -9,7 +9,7 @@ function displayProducts(products) {
     // Find the container where products will be displayed
     const container = document.querySelector('#all-products .container');
 
-   
+
     // Iterate over each product and create the HTML structure safely
     products.forEach(product => {
         // Create the main product div
@@ -22,8 +22,8 @@ function displayProducts(products) {
         const img = document.createElement('img');
         img.src = product.image;
         img.alt = `product: ${product.title}`;
-        img.loading="lazy";
-        img.width=250;
+        img.loading = "lazy";
+        img.width = 250;
         pictureDiv.appendChild(img);
 
         // Create the product info div
@@ -61,16 +61,29 @@ function displayProducts(products) {
         container.appendChild(productElement);
     });
 
-    
+
 
 }
 
+window.onload = function () {
+    let status = 'idle';
+    let productSection = document.querySelector('#all-products');
+
+    //  console.log(productSection.getBoundingClientRect().top) //devuelve coordenadas relativas a la ventana de visualizacion
+    window.onscroll = function () {
+
+        let position = productSection.getBoundingClientRect().top - (window.scrollY + window.innerHeight);
+        // represents how far the user has scrolled down the page + the height of the viewport
+        // console.log(position);
+        if (status == 'idle' && position <= 0) {
+            status = 'fetching'
+            loadProducts();
+            // Simulate heavy operation. It could be a complex price calculation.
+            for (let i = 0; i < 10000000; i++) {
+                const temp = Math.sqrt(i) * Math.sqrt(i);
+            }
+        }
+    }
 
 
-loadProducts();
-
-// Simulate heavy operation. It could be a complex price calculation.
-for (let i = 0; i < 10000000; i++) {
-    const temp = Math.sqrt(i) * Math.sqrt(i);
 }
-
